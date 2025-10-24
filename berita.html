@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Berita Crypto - LA Crypto</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      :root {
+        --primary: #6c5ce7;
+        --secondary: #a29bfe;
+        --accent: #00cec9;
+        --dark: #2d3436;
+        --light: #f5f6fa;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --danger: #e17055;
+      }
+
+      body {
+        background-color: #0f1419;
+        color: var(--light);
+        line-height: 1.6;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+
+      /* Header Styles */
+      header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 1rem 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo-icon {
+        font-size: 2rem;
+        color: var(--light);
+      }
+
+      .logo-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--light);
+      }
+
+      .logo-text span {
+        color: var(--accent);
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 1.5rem;
+      }
+
+      nav a {
+        color: var(--light);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+        padding: 0.5rem 0;
+        position: relative;
+      }
+
+      nav a:hover {
+        color: var(--accent);
+      }
+
+      nav a.active {
+        color: var(--accent);
+      }
+
+      nav a.active::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--accent);
+      }
+
+      .auth-buttons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .btn {
+        padding: 0.5rem 1.5rem;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: none;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 2px solid var(--light);
+        color: var(--light);
+      }
+
+      .btn-outline:hover {
+        background: var(--light);
+        color: var(--primary);
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: var(--dark);
+      }
+
+      .btn-primary:hover {
+        background: #00b8b5;
+        transform: translateY(-2px);
+      }
+
+      /* Breadcrumb */
+      .breadcrumb {
+        padding: 1.5rem 0 1rem;
+        color: #b2bec3;
+        font-size: 0.9rem;
+      }
+
+      .breadcrumb a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      /* Page Header */
+      .page-header {
+        text-align: center;
+        padding: 2rem 0;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        margin-bottom: 2rem;
+        border-radius: 15px;
+      }
+
+      .page-header h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .page-header p {
+        font-size: 1rem;
+        max-width: 600px;
+        margin: 0 auto;
+        opacity: 0.9;
+      }
+
+      /* News Grid */
+      .news-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+      }
+
+      .news-card {
+        background: linear-gradient(145deg, #1a1f2b, #151922);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid #2a2f3b;
+        cursor: pointer;
+      }
+
+      .news-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .news-image {
+        height: 180px;
+        background-size: cover;
+        background-position: center;
+        background-color: var(--primary);
+      }
+
+      .news-content {
+        padding: 1.25rem;
+      }
+
+      .news-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        font-size: 0.8rem;
+        color: #b2bec3;
+      }
+
+      .news-category {
+        background: var(--accent);
+        color: var(--dark);
+        padding: 0.25rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .news-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+        color: var(--light);
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .news-excerpt {
+        color: #b2bec3;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .news-read-more {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      /* Categories Filter */
+      .categories-filter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        justify-content: center;
+      }
+
+      .category-filter-btn {
+        padding: 0.5rem 1.25rem;
+        border-radius: 20px;
+        background: #1a1f2b;
+        color: var(--light);
+        border: 1px solid #2a2f3b;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+      }
+
+      .category-filter-btn.active,
+      .category-filter-btn:hover {
+        background: var(--accent);
+        color: var(--dark);
+      }
+
+      /* Pagination */
+      .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin: 2rem 0;
+      }
+
+      .pagination-btn {
+        padding: 0.5rem 0.8rem;
+        border-radius: 5px;
+        background: #1a1f2b;
+        color: var(--light);
+        border: 1px solid #2a2f3b;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+      }
+
+      .pagination-btn.active,
+      .pagination-btn:hover {
+        background: var(--accent);
+        color: var(--dark);
+      }
+
+      /* News Detail Styles */
+      .news-detail-container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .news-detail-header {
+        margin-bottom: 2rem;
+      }
+
+      .news-detail-image {
+        height: 350px;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .news-detail-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        color: #b2bec3;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .meta-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .news-date {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .news-detail-category {
+        background: var(--accent);
+        color: var(--dark);
+        padding: 0.4rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 0.8rem;
+      }
+
+      .news-detail-title {
+        font-size: 2rem;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        color: var(--light);
+      }
+
+      .news-detail-author {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #2a2f3b;
+      }
+
+      .author-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 0.9rem;
+      }
+
+      .author-info h4 {
+        margin-bottom: 0.2rem;
+        font-size: 0.95rem;
+      }
+
+      .author-info p {
+        color: #b2bec3;
+        font-size: 0.8rem;
+      }
+
+      .news-detail-content {
+        font-size: 1.05rem;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+      }
+
+      .news-detail-content p {
+        margin-bottom: 1.25rem;
+      }
+
+      .news-detail-content h2,
+      .news-detail-content h3 {
+        margin: 1.5rem 0 0.75rem;
+        color: var(--accent);
+      }
+
+      .news-detail-content h2 {
+        font-size: 1.5rem;
+      }
+
+      .news-detail-content h3 {
+        font-size: 1.25rem;
+      }
+
+      .news-detail-content blockquote {
+        border-left: 3px solid var(--accent);
+        padding-left: 1rem;
+        margin: 1.5rem 0;
+        font-style: italic;
+        color: #b2bec3;
+        background: rgba(108, 92, 231, 0.1);
+        padding: 1rem;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .news-detail-content ul,
+      .news-detail-content ol {
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+      }
+
+      .news-detail-content li {
+        margin-bottom: 0.5rem;
+      }
+
+      .news-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin: 1.5rem 0;
+      }
+
+      .action-btn {
+        padding: 0.6rem 1rem;
+        border-radius: 20px;
+        background: #1a1f2b;
+        color: var(--light);
+        border: 1px solid #2a2f3b;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .action-btn:hover {
+        background: var(--accent);
+        color: var(--dark);
+      }
+
+      .related-news {
+        margin-top: 3rem;
+      }
+
+      .related-news h2 {
+        margin-bottom: 1.5rem;
+        text-align: center;
+        font-size: 1.5rem;
+      }
+
+      /* Loading */
+      .loading {
+        text-align: center;
+        padding: 2rem;
+        color: var(--accent);
+      }
+
+      .loading i {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .error {
+        text-align: center;
+        padding: 2rem;
+        color: var(--danger);
+      }
+
+      /* Hidden class for routing */
+      .hidden {
+        display: none !important;
+      }
+
+      /* Footer */
+      footer {
+        background: #0a0e13;
+        padding: 3rem 0 1.5rem;
+        margin-top: 3rem;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .footer-column h3 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        color: var(--accent);
+        position: relative;
+        display: inline-block;
+      }
+
+      .footer-column h3::after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 30px;
+        height: 2px;
+        background: var(--accent);
+      }
+
+      .footer-column ul {
+        list-style: none;
+      }
+
+      .footer-column ul li {
+        margin-bottom: 0.6rem;
+      }
+
+      .footer-column a {
+        color: #b2bec3;
+        text-decoration: none;
+        transition: color 0.3s;
+        font-size: 0.9rem;
+      }
+
+      .footer-column a:hover {
+        color: var(--accent);
+      }
+
+      .social-links {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .social-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: #1a1f2b;
+        color: var(--light);
+        transition: all 0.3s;
+        font-size: 0.9rem;
+      }
+
+      .social-links a:hover {
+        background: var(--accent);
+        color: var(--dark);
+        transform: translateY(-2px);
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 1.5rem;
+        border-top: 1px solid #2a2f3b;
+        color: #b2bec3;
+        font-size: 0.85rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .header-content {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        nav ul {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 1rem;
+        }
+
+        .news-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .categories-filter {
+          justify-content: flex-start;
+          overflow-x: auto;
+          padding-bottom: 0.5rem;
+        }
+
+        .news-detail-title {
+          font-size: 1.5rem;
+        }
+
+        .news-detail-image {
+          height: 200px;
+        }
+
+        .news-detail-meta {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+
+        .meta-left {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+
+        .news-actions {
+          flex-direction: column;
+        }
+
+        .page-header h1 {
+          font-size: 1.5rem;
+        }
+
+        .page-header {
+          padding: 1.5rem 0;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          width: 95%;
+          padding: 0 10px;
+        }
+
+        .news-content {
+          padding: 1rem;
+        }
+
+        .news-detail-content {
+          font-size: 1rem;
+        }
+
+        .auth-buttons {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .btn {
+          padding: 0.4rem 1rem;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <div class="logo-icon">
+              <i class="fas fa-coins"></i>
+            </div>
+            <div class="logo-text">LA <span>Crypto</span></div>
+          </div>
+          <nav>
+            <ul>
+              <li><a href="index.html">Beranda</a></li>
+              <li><a href="airdrop.html">Airdrop</a></li>
+              <li><a href="Pengembangan.html">Panduan</a></li>
+              <li><a href="berita.html" class="active">Berita</a></li>
+              <li><a href="Pengembangan.html">Tentang Kami</a></li>
+            </ul>
+          </nav>
+          <div class="auth-buttons">
+            <button class="btn btn-outline">
+              <a href="Pengembangan.html">Masuk</a>
+            </button>
+            <button class="btn btn-primary">
+              <a href="Pengembangan.html">Daftar</a>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content">
+      <!-- News List View -->
+      <div id="news-list-view">
+        <div class="container">
+          <div class="breadcrumb">
+            <a href="index.html">Beranda</a> / <span>Berita Crypto</span>
+          </div>
+
+          <div class="page-header">
+            <h1>Berita Crypto Terbaru</h1>
+            <p>
+              Update terkini seputar cryptocurrency, blockchain, dan
+              perkembangan teknologi finansial
+            </p>
+          </div>
+
+          <div class="categories-filter" id="categories-filter">
+            <!-- Categories will be dynamically inserted here -->
+          </div>
+
+          <div id="news-container">
+            <div class="loading">
+              <i class="fas fa-spinner fa-spin"></i>
+              <p>Memuat berita...</p>
+            </div>
+          </div>
+
+          <div class="pagination" id="pagination">
+            <!-- Pagination will be dynamically inserted here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- News Detail View -->
+      <div id="news-detail-view" class="hidden">
+        <div class="container">
+          <div class="breadcrumb" id="breadcrumb">
+            <a href="index.html">Beranda</a> /
+            <a href="#" onclick="showNewsList()">Berita</a> /
+            <span>Memuat...</span>
+          </div>
+
+          <div id="news-detail-container">
+            <div class="loading">
+              <i class="fas fa-spinner fa-spin"></i>
+              <p>Memuat berita...</p>
+            </div>
+          </div>
+
+          <div class="related-news">
+            <h2>Berita Terkait</h2>
+            <div id="related-news-container">
+              <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Memuat berita terkait...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-column">
+            <h3>LA Crypto</h3>
+            <p style="font-size: 0.9rem; color: #b2bec3; line-height: 1.5">
+              Sumber informasi terpercaya untuk airdrop cryptocurrency dan
+              berita terkini di dunia crypto.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-telegram"></i></a>
+              <a href="#"><i class="fab fa-discord"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="footer-column">
+            <h3>Menu Cepat</h3>
+            <ul>
+              <li><a href="index.html">Beranda</a></li>
+              <li><a href="airdrop.html">Airdrop Live</a></li>
+              <li><a href="airdrop.html">Airdrop Mendatang</a></li>
+              <li><a href="Pengembangan.html">Panduan Pemula</a></li>
+              <li><a href="berita.html">Blog</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Kategori</h3>
+            <ul>
+              <li><a href="news.html#kategori=defi">DeFi</a></li>
+              <li><a href="news.html#kategori=nft">NFT</a></li>
+              <li><a href="news.html#kategori=gamefi">GameFi</a></li>
+              <li><a href="news.html#kategori=layer2">Layer 2</a></li>
+              <li><a href="news.html#kategori=regulasi">Regulasi</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Bantuan</h3>
+            <ul>
+              <li><a href="Pengembangan.html">Tentang Kami</a></li>
+              <li><a href="Pengembangan.html">Kebijakan Privasi</a></li>
+              <li><a href="Pengembangan.html">Syarat & Ketentuan</a></li>
+              <li><a href="Pengembangan.html">Kontak</a></li>
+              <li><a href="Pengembangan.html">Disclaimer</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 LA Crypto -
+            <span>Let's Airdrop Center and Cryptocurrency News</span>. All
+            rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // API URL - Updated with correct GAS URL
+      const API_URL =
+        "https://script.google.com/macros/s/AKfycbyjfCLcmlcrMg2rrF8V5hfTHWVr2vtDioXqBd69lWvk2b-3zzzyKpE3EdhOk1juPQQqSg/exec";
+
+      // Global variables
+      let allNews = [];
+      let currentPage = 1;
+      const itemsPerPage = 6;
+      let currentCategory = "all";
+
+      // Function to format date
+      function formatDate(dateString) {
+        try {
+          // Handle various date formats
+          let date;
+          if (dateString.includes("T")) {
+            date = new Date(dateString);
+          } else {
+            // Handle simple date strings like "2023-10-15"
+            date = new Date(dateString + "T00:00:00");
+          }
+
+          // Format: 15 Oktober 2023
+          const options = {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          };
+          return date.toLocaleDateString("id-ID", options);
+        } catch (error) {
+          console.log("Date parsing error:", error);
+          return dateString; // Return original if parsing fails
+        }
+      }
+
+      // Function to format time
+      function formatTime(dateString) {
+        try {
+          let date;
+          if (dateString.includes("T")) {
+            date = new Date(dateString);
+          } else {
+            date = new Date(dateString + "T00:00:00");
+          }
+
+          // Format: 17:00 WIB
+          const options = {
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "Asia/Jakarta",
+          };
+          return date.toLocaleTimeString("id-ID", options) + " WIB";
+        } catch (error) {
+          return "";
+        }
+      }
+
+      // Function to fetch data from Google Apps Script
+      async function fetchData() {
+        try {
+          console.log("Fetching data from:", API_URL);
+          const response = await fetch(API_URL);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log("Data fetched successfully:", data);
+          return data;
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          return null;
+        }
+      }
+
+      // Function to show/hide views
+      function showView(viewName) {
+        document.getElementById("news-list-view").classList.add("hidden");
+        document.getElementById("news-detail-view").classList.add("hidden");
+        document.getElementById(viewName).classList.remove("hidden");
+      }
+
+      // Function to show news list
+      function showNewsList() {
+        showView("news-list-view");
+        window.location.hash = "";
+        document.title = "Berita Crypto - LA Crypto";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      // Function to show news detail
+      function showNewsDetail(slug) {
+        showView("news-detail-view");
+        window.location.hash = `berita/${slug}`;
+        renderNewsDetail(slug);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      // Function to render categories filter
+      function renderCategoriesFilter(categories) {
+        const container = document.getElementById("categories-filter");
+        container.innerHTML = "";
+
+        // Add "All" button
+        const allButton = document.createElement("button");
+        allButton.className = `category-filter-btn ${
+          currentCategory === "all" ? "active" : ""
+        }`;
+        allButton.textContent = "Semua Berita";
+        allButton.onclick = () => filterByCategory("all");
+        container.appendChild(allButton);
+
+        // Add category buttons
+        categories.forEach((category) => {
+          const button = document.createElement("button");
+          button.className = `category-filter-btn ${
+            currentCategory === category.nama ? "active" : ""
+          }`;
+          button.textContent = category.nama;
+          button.onclick = () => filterByCategory(category.nama);
+          container.appendChild(button);
+        });
+      }
+
+      // Function to filter news by category
+      function filterByCategory(category) {
+        currentCategory = category;
+        currentPage = 1;
+        renderNewsGrid();
+        updateActiveCategoryButton();
+      }
+
+      // Function to render news grid
+      function renderNewsGrid() {
+        const container = document.getElementById("news-container");
+
+        // Filter news by category
+        let filteredNews = allNews;
+        if (currentCategory !== "all") {
+          filteredNews = allNews.filter(
+            (news) => news.kategori === currentCategory
+          );
+        }
+
+        // Calculate pagination
+        const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const paginatedNews = filteredNews.slice(
+          startIndex,
+          startIndex + itemsPerPage
+        );
+
+        if (paginatedNews.length === 0) {
+          container.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-newspaper"></i>
+                        <p>Tidak ada berita yang ditemukan untuk kategori "${currentCategory}"</p>
+                    </div>
+                `;
+          return;
+        }
+
+        // Render news cards
+        container.innerHTML = "";
+        const newsGrid = document.createElement("div");
+        newsGrid.className = "news-grid";
+
+        paginatedNews.forEach((news) => {
+          const formattedDate = formatDate(news.tanggal);
+          const card = document.createElement("div");
+          card.className = "news-card";
+          card.onclick = () => showNewsDetail(news.slug || news.id);
+          card.innerHTML = `
+                    <div class="news-image" style="background-image: url('${
+                      news.gambar_url ||
+                      "https://images.unsplash.com/photo-1621761191315-f547fe546b52"
+                    }')"></div>
+                    <div class="news-content">
+                        <div class="news-meta">
+                            <span><i class="far fa-calendar"></i> ${formattedDate}</span>
+                            <span class="news-category">${
+                              news.kategori || "Umum"
+                            }</span>
+                        </div>
+                        <h3 class="news-title">${
+                          news.judul || "Judul Berita"
+                        }</h3>
+                        <p class="news-excerpt">${
+                          news.isi_singkat || "Deskripsi singkat berita..."
+                        }</p>
+                        <div class="news-read-more" onclick="event.stopPropagation(); showNewsDetail('${
+                          news.slug || news.id
+                        }')">
+                            Baca Selengkapnya <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                `;
+          newsGrid.appendChild(card);
+        });
+
+        container.appendChild(newsGrid);
+        renderPagination(totalPages);
+        updateActiveCategoryButton();
+      }
+
+      // Function to render pagination
+      function renderPagination(totalPages) {
+        const container = document.getElementById("pagination");
+        container.innerHTML = "";
+
+        if (totalPages <= 1) return;
+
+        // Previous button
+        if (currentPage > 1) {
+          const prevButton = document.createElement("button");
+          prevButton.className = "pagination-btn";
+          prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+          prevButton.onclick = () => changePage(currentPage - 1);
+          container.appendChild(prevButton);
+        }
+
+        // Page numbers
+        const maxPages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
+        let endPage = Math.min(totalPages, startPage + maxPages - 1);
+
+        if (endPage - startPage + 1 < maxPages) {
+          startPage = Math.max(1, endPage - maxPages + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+          const pageButton = document.createElement("button");
+          pageButton.className = `pagination-btn ${
+            i === currentPage ? "active" : ""
+          }`;
+          pageButton.textContent = i;
+          pageButton.onclick = () => changePage(i);
+          container.appendChild(pageButton);
+        }
+
+        // Next button
+        if (currentPage < totalPages) {
+          const nextButton = document.createElement("button");
+          nextButton.className = "pagination-btn";
+          nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+          nextButton.onclick = () => changePage(currentPage + 1);
+          container.appendChild(nextButton);
+        }
+      }
+
+      // Function to change page
+      function changePage(page) {
+        currentPage = page;
+        renderNewsGrid();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      // Function to update active category button
+      function updateActiveCategoryButton() {
+        const buttons = document.querySelectorAll(".category-filter-btn");
+        buttons.forEach((button) => {
+          const categoryName =
+            button.textContent === "Semua Berita" ? "all" : button.textContent;
+          button.classList.toggle("active", categoryName === currentCategory);
+        });
+      }
+
+      // Function to render news detail
+      async function renderNewsDetail(slug) {
+        const container = document.getElementById("news-detail-container");
+        const breadcrumb = document
+          .getElementById("breadcrumb")
+          .querySelector("span");
+
+        container.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Memuat berita...</p>
+                </div>
+            `;
+
+        const data = await fetchData();
+
+        if (data && data.news) {
+          // Cari berita berdasarkan slug atau ID
+          const news = data.news.find(
+            (item) =>
+              (item.slug === slug || item.id == slug) &&
+              item.status === "published"
+          );
+
+          if (!news) {
+            container.innerHTML = `
+                        <div class="error">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Berita tidak ditemukan</p>
+                            <button class="btn btn-primary" onclick="showNewsList()" style="margin-top: 1rem;">
+                                Kembali ke Daftar Berita
+                            </button>
+                        </div>
+                    `;
+            return;
+          }
+
+          // Get related news (same category, exclude current news)
+          const relatedNews = data.news
+            .filter(
+              (item) =>
+                item.id != news.id &&
+                item.kategori === news.kategori &&
+                item.status === "published"
+            )
+            .slice(0, 3);
+
+          // Format dates
+          const formattedDate = formatDate(news.tanggal);
+          const formattedTime = formatTime(news.tanggal);
+
+          // Render news detail
+          container.innerHTML = `
+                    <div class="news-detail-header">
+                        <div class="news-detail-image" style="background-image: url('${
+                          news.gambar_url ||
+                          "https://images.unsplash.com/photo-1621761191315-f547fe546b52"
+                        }')"></div>
+                        
+                        <div class="news-detail-meta">
+                            <div class="meta-left">
+                                <span class="news-date">
+                                    <i class="far fa-calendar"></i> ${formattedDate}
+                                </span>
+                                ${
+                                  formattedTime
+                                    ? `<span class="news-time">
+                                    <i class="far fa-clock"></i> ${formattedTime}
+                                </span>`
+                                    : ""
+                                }
+                            </div>
+                            <span class="news-detail-category">${
+                              news.kategori || "Umum"
+                            }</span>
+                        </div>
+                        
+                        <h1 class="news-detail-title">${
+                          news.judul || "Judul Berita"
+                        }</h1>
+                        
+                        <div class="news-detail-author">
+                            <div class="author-avatar">
+                                ${
+                                  news.penulis
+                                    ? news.penulis.charAt(0).toUpperCase()
+                                    : "A"
+                                }
+                            </div>
+                            <div class="author-info">
+                                <h4>${news.penulis || "Admin LA Crypto"}</h4>
+                                <p>Penulis</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="news-detail-content">
+                        ${
+                          news.isi_lengkap ||
+                          news.isi_singkat ||
+                          "<p>Konten berita sedang dalam proses update.</p>"
+                        }
+                    </div>
+                    
+                    <div class="news-actions">
+                        <button class="action-btn" onclick="shareNews('${
+                          news.judul
+                        }')">
+                            <i class="fas fa-share"></i> Bagikan
+                        </button>
+                        <button class="action-btn" onclick="showNewsList()">
+                            <i class="fas fa-arrow-left"></i> Kembali ke Berita
+                        </button>
+                    </div>
+                `;
+
+          // Update breadcrumb and title
+          breadcrumb.textContent = news.judul || "Detail Berita";
+          document.title = `${news.judul || "Berita"} - LA Crypto`;
+
+          // Render related news
+          renderRelatedNews(relatedNews);
+        } else {
+          container.innerHTML = `
+                    <div class="error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Gagal memuat berita. Silakan refresh halaman.</p>
+                        <button class="btn btn-primary" onclick="showNewsList()" style="margin-top: 1rem;">
+                            Kembali ke Daftar Berita
+                        </button>
+                    </div>
+                `;
+        }
+      }
+
+      // Function to render related news
+      function renderRelatedNews(relatedNews) {
+        const container = document.getElementById("related-news-container");
+
+        if (relatedNews.length === 0) {
+          container.innerHTML =
+            '<p style="text-align: center; color: #b2bec3;">Tidak ada berita terkait</p>';
+          return;
+        }
+
+        container.innerHTML = "";
+        const newsGrid = document.createElement("div");
+        newsGrid.className = "news-grid";
+
+        relatedNews.forEach((news) => {
+          const formattedDate = formatDate(news.tanggal);
+          const card = document.createElement("div");
+          card.className = "news-card";
+          card.onclick = () => showNewsDetail(news.slug || news.id);
+          card.innerHTML = `
+                    <div class="news-image" style="background-image: url('${
+                      news.gambar_url ||
+                      "https://images.unsplash.com/photo-1621761191315-f547fe546b52"
+                    }')"></div>
+                    <div class="news-content">
+                        <div class="news-meta">
+                            <span><i class="far fa-calendar"></i> ${formattedDate}</span>
+                            <span class="news-category">${
+                              news.kategori || "Umum"
+                            }</span>
+                        </div>
+                        <h3 class="news-title">${
+                          news.judul || "Judul Berita"
+                        }</h3>
+                        <p class="news-excerpt">${
+                          news.isi_singkat || "Deskripsi singkat berita..."
+                        }</p>
+                        <div class="news-read-more" onclick="event.stopPropagation(); showNewsDetail('${
+                          news.slug || news.id
+                        }')">
+                            Baca Selengkapnya <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                `;
+          newsGrid.appendChild(card);
+        });
+
+        container.appendChild(newsGrid);
+      }
+
+      // Function to share news
+      function shareNews(title = "") {
+        const shareData = {
+          title: title || document.title,
+          url: window.location.href,
+        };
+
+        if (navigator.share) {
+          navigator.share(shareData);
+        } else {
+          // Fallback: copy to clipboard
+          navigator.clipboard.writeText(window.location.href);
+          alert("Link berita telah disalin ke clipboard!");
+        }
+      }
+
+      // Function to handle hash changes
+      function handleHashChange() {
+        const hash = window.location.hash.replace("#", "");
+
+        if (hash.startsWith("berita/")) {
+          const slug = hash.replace("berita/", "");
+          showNewsDetail(slug);
+        } else if (hash.startsWith("kategori=")) {
+          const kategori = hash.replace("kategori=", "");
+          currentCategory = kategori;
+          currentPage = 1;
+          showNewsList();
+        } else {
+          showNewsList();
+        }
+      }
+
+      // Initialize the application
+      document.addEventListener("DOMContentLoaded", async function () {
+        console.log("Initializing application...");
+
+        // Load data first
+        const data = await fetchData();
+
+        if (data && data.news) {
+          allNews = data.news.filter((news) => news.status === "published");
+          console.log("Filtered news:", allNews);
+
+          // Get unique categories from news
+          const categories = [
+            ...new Set(allNews.map((news) => news.kategori).filter(Boolean)),
+          ].map((category) => ({
+            id: category.toLowerCase(),
+            nama: category,
+          }));
+
+          renderCategoriesFilter(categories);
+          renderNewsGrid();
+
+          // Handle initial hash
+          handleHashChange();
+        } else {
+          document.getElementById("news-container").innerHTML = `
+                    <div class="error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Gagal memuat berita. Silakan refresh halaman.</p>
+                    </div>
+                `;
+        }
+
+        // Listen for hash changes
+        window.addEventListener("hashchange", handleHashChange);
+      });
+    </script>
+  </body>
+</html>

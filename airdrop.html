@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Airdrop - LA Crypto</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Reset & Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      :root {
+        --primary: #6c5ce7;
+        --secondary: #a29bfe;
+        --accent: #00cec9;
+        --dark: #2d3436;
+        --light: #f5f6fa;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --danger: #e17055;
+        --bg-dark: #0f1419;
+        --card-bg: #1a1f2b;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--light);
+        line-height: 1.6;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+
+      /* Header Styles */
+      header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 1rem 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo-icon {
+        font-size: 2rem;
+        color: var(--light);
+      }
+
+      .logo-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--light);
+      }
+
+      .logo-text span {
+        color: var(--accent);
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 1.5rem;
+      }
+
+      nav a {
+        color: var(--light);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+        padding: 0.5rem 0;
+        position: relative;
+      }
+
+      nav a:hover {
+        color: var(--accent);
+      }
+
+      nav a.active {
+        color: var(--accent);
+      }
+
+      nav a.active::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--accent);
+      }
+
+      .auth-buttons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .btn {
+        padding: 0.5rem 1.5rem;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: none;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 2px solid var(--light);
+        color: var(--light);
+      }
+
+      .btn-outline:hover {
+        background: var(--light);
+        color: var(--primary);
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: var(--dark);
+      }
+
+      .btn-primary:hover {
+        background: #00b8b5;
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        border: 1px solid var(--secondary);
+        color: var(--secondary);
+      }
+
+      .btn-secondary:hover {
+        background: var(--secondary);
+        color: var(--dark);
+      }
+
+      .btn-large {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+      }
+
+      /* Language Selector */
+      .language-selector {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-left: 1rem;
+      }
+
+      .language-selector select {
+        background: transparent;
+        color: var(--light);
+        border: 1px solid var(--light);
+        border-radius: 5px;
+        padding: 0.3rem 0.5rem;
+        cursor: pointer;
+      }
+
+      /* Page Header */
+      .page-header {
+        padding: 3rem 0 2rem;
+        text-align: center;
+      }
+
+      .page-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(to right, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .page-header p {
+        color: #b2bec3;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* Breadcrumb */
+      .breadcrumb {
+        padding: 1.5rem 0;
+        color: #b2bec3;
+      }
+
+      .breadcrumb a {
+        color: var(--accent);
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      /* Views Container */
+      .views-container {
+        position: relative;
+        min-height: 500px;
+      }
+
+      .view {
+        display: none;
+      }
+
+      .view.active {
+        display: block;
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* LIST VIEW STYLES */
+      .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+      }
+
+      .stat-card {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 10px;
+        text-align: center;
+        border: 1px solid #2a2f3b;
+      }
+
+      .stat-card i {
+        font-size: 2rem;
+        color: var(--accent);
+        margin-bottom: 1rem;
+      }
+
+      .stat-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-card p {
+        color: #b2bec3;
+        font-size: 0.9rem;
+      }
+
+      /* Filter Section */
+      .filter-section {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #2a2f3b;
+      }
+
+      .filter-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .filter-group label {
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--accent);
+      }
+
+      .filter-select,
+      .filter-input {
+        padding: 0.8rem 1rem;
+        border-radius: 10px;
+        border: 1px solid #2a2f3b;
+        background: #0f1419;
+        color: var(--light);
+        font-size: 1rem;
+      }
+
+      .filter-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+      }
+
+      .filter-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .filter-tag {
+        background: var(--primary);
+        color: var(--light);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .filter-tag i {
+        cursor: pointer;
+      }
+
+      .results-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: var(--card-bg);
+        border-radius: 10px;
+        border: 1px solid #2a2f3b;
+      }
+
+      .sort-options select {
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        border: 1px solid #2a2f3b;
+        background: #0f1419;
+        color: var(--light);
+      }
+
+      /* Airdrop Grid */
+      .airdrop-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+      }
+
+      .airdrop-card {
+        background: linear-gradient(145deg, var(--card-bg), #151922);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid #2a2f3b;
+        cursor: pointer;
+      }
+
+      .airdrop-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .airdrop-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        z-index: 2;
+      }
+
+      .badge-live {
+        background: var(--success);
+        color: var(--dark);
+      }
+
+      .badge-upcoming {
+        background: var(--warning);
+        color: var(--dark);
+      }
+
+      .badge-ended {
+        background: var(--danger);
+        color: var(--light);
+      }
+
+      .airdrop-image {
+        height: 180px;
+        background: linear-gradient(45deg, var(--primary), var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .airdrop-image i {
+        font-size: 4rem;
+        color: white;
+        opacity: 0.8;
+      }
+
+      .airdrop-content {
+        padding: 1.5rem;
+      }
+
+      .airdrop-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+        color: var(--light);
+      }
+
+      .airdrop-meta {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        color: #b2bec3;
+      }
+
+      .airdrop-value {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .airdrop-description {
+        margin-bottom: 1.5rem;
+        color: #dfe6e9;
+        font-size: 0.95rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .airdrop-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .airdrop-tag {
+        background: rgba(108, 92, 231, 0.2);
+        color: var(--secondary);
+        padding: 0.2rem 0.6rem;
+        border-radius: 15px;
+        font-size: 0.7rem;
+      }
+
+      .airdrop-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      /* DETAIL VIEW STYLES */
+      .airdrop-header {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 3rem;
+        margin-bottom: 3rem;
+      }
+
+      .airdrop-main {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 2rem;
+        border: 1px solid #2a2f3b;
+      }
+
+      .airdrop-sidebar {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 2rem;
+        border: 1px solid #2a2f3b;
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+      }
+
+      .key-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+      }
+
+      .info-item {
+        text-align: center;
+      }
+
+      .info-label {
+        font-size: 0.9rem;
+        color: #b2bec3;
+        margin-bottom: 0.5rem;
+      }
+
+      .info-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--light);
+      }
+
+      .info-value.highlight {
+        color: var(--accent);
+      }
+
+      .progress-section {
+        margin-bottom: 2rem;
+      }
+
+      .progress-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+
+      .progress-bar {
+        height: 8px;
+        background: #2a2f3b;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(to right, var(--primary), var(--accent));
+        border-radius: 10px;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .social-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 1.2rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: var(--light);
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+
+      .social-link:hover {
+        background: var(--primary);
+        transform: translateY(-2px);
+      }
+
+      .guide-section {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #2a2f3b;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .step-list {
+        counter-reset: step-counter;
+      }
+
+      .step-item {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        position: relative;
+      }
+
+      .step-item::before {
+        counter-increment: step-counter;
+        content: counter(step-counter);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 50%;
+        font-weight: bold;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+
+      .step-content h3 {
+        margin-bottom: 0.5rem;
+        color: var(--light);
+      }
+
+      .step-content p {
+        color: #dfe6e9;
+        margin-bottom: 1rem;
+      }
+
+      .step-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .action-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(108, 92, 231, 0.2);
+        color: var(--secondary);
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+      }
+
+      .action-link:hover {
+        background: var(--primary);
+        color: var(--light);
+      }
+
+      .screenshot {
+        margin-top: 1rem;
+        background: #2a2f3b;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        color: #b2bec3;
+        font-style: italic;
+      }
+
+      .claim-section {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #2a2f3b;
+      }
+
+      .warning-box {
+        background: rgba(253, 203, 110, 0.1);
+        border: 1px solid var(--warning);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .warning-box h4 {
+        color: var(--warning);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* Deskripsi Lengkap */
+      .full-description {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #2a2f3b;
+      }
+
+      .full-description-content {
+        line-height: 1.8;
+        color: #dfe6e9;
+      }
+
+      .full-description-content p {
+        margin-bottom: 1rem;
+      }
+
+      .full-description-content ul,
+      .full-description-content ol {
+        margin: 1rem 0;
+        padding-left: 2rem;
+      }
+
+      .full-description-content li {
+        margin-bottom: 0.5rem;
+      }
+
+      /* Loading & Error States */
+      .loading {
+        text-align: center;
+        padding: 3rem;
+        color: var(--accent);
+      }
+
+      .error-message {
+        background: var(--danger);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        margin: 2rem 0;
+      }
+
+      .no-results {
+        text-align: center;
+        padding: 3rem;
+        color: #b2bec3;
+      }
+
+      .no-results i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+      }
+
+      /* Back Button */
+      .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 1.5rem;
+        background: var(--card-bg);
+        color: var(--light);
+        text-decoration: none;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        border: 1px solid #2a2f3b;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+
+      .back-button:hover {
+        background: var(--primary);
+        transform: translateX(-5px);
+      }
+
+      /* Footer */
+      footer {
+        background: #0a0e13;
+        padding: 4rem 0 2rem;
+        margin-top: 4rem;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      .footer-column h3 {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: var(--accent);
+        position: relative;
+        display: inline-block;
+      }
+
+      .footer-column h3::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background: var(--accent);
+      }
+
+      .footer-column ul {
+        list-style: none;
+      }
+
+      .footer-column ul li {
+        margin-bottom: 0.8rem;
+      }
+
+      .footer-column a {
+        color: #b2bec3;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .footer-column a:hover {
+        color: var(--accent);
+      }
+
+      .social-links-footer {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .social-links-footer a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #1a1f2b;
+        color: var(--light);
+        transition: all 0.3s;
+      }
+
+      .social-links-footer a:hover {
+        background: var(--accent);
+        color: var(--dark);
+        transform: translateY(-3px);
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid #2a2f3b;
+        color: #b2bec3;
+        font-size: 0.9rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 968px) {
+        .airdrop-header {
+          grid-template-columns: 1fr;
+        }
+
+        .airdrop-sidebar {
+          position: static;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header-content {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        nav ul {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .filter-row {
+          grid-template-columns: 1fr;
+        }
+
+        .filter-actions {
+          flex-direction: column;
+          gap: 1rem;
+          align-items: flex-start;
+        }
+
+        .results-info {
+          flex-direction: column;
+          gap: 1rem;
+          align-items: flex-start;
+        }
+
+        .airdrop-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .airdrop-actions {
+          flex-direction: column;
+        }
+
+        .step-item {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .step-item::before {
+          align-self: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <div class="logo-icon">
+              <i class="fas fa-coins"></i>
+            </div>
+            <div class="logo-text">LA <span>Crypto</span></div>
+          </div>
+          <nav>
+            <ul>
+              <li><a href="index.html">Beranda</a></li>
+              <li><a href="airdrop.html" class="active">Airdrop</a></li>
+              <li><a href="Pengembangan.html">Panduan</a></li>
+              <li><a href="berita.html">Berita</a></li>
+              <li><a href="Pengembangan.html">Tentang Kami</a></li>
+            </ul>
+          </nav>
+          <div class="auth-buttons">
+            <div class="language-selector">
+              <i class="fas fa-globe"></i>
+              <select id="languageSelect">
+                <option value="id">Bahasa Indonesia</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+            <button class="btn btn-outline">
+              <a href="Pengembangan.html">Masuk</a>
+            </button>
+            <button class="btn btn-primary">
+              <a href="Pengembangan.html">Daftar</a>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="container">
+      <div class="breadcrumb" id="breadcrumb">
+        <a onclick="showListView()">Beranda</a> &gt;
+        <a onclick="showListView()">Airdrop</a> &gt;
+        <span id="breadcrumbCurrent">Semua Airdrop</span>
+      </div>
+    </div>
+
+    <!-- Views Container -->
+    <div class="container">
+      <div class="views-container">
+        <!-- LIST VIEW -->
+        <div id="listView" class="view active">
+          <!-- Page Header -->
+          <section class="page-header">
+            <h1 id="pageTitle">Jelajahi Semua Airdrop</h1>
+            <p id="pageDescription">
+              Temukan airdrop cryptocurrency terbaru dan terpercaya.
+            </p>
+          </section>
+
+          <!-- Quick Stats -->
+          <section>
+            <div class="quick-stats" id="quickStats">
+              <div class="stat-card">
+                <i class="fas fa-bolt"></i>
+                <h3 id="liveCount">-</h3>
+                <p id="activeAirdropsText">Airdrop Aktif</p>
+              </div>
+              <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <h3 id="upcomingCount">-</h3>
+                <p id="upcomingText">Akan Datang</p>
+              </div>
+              <div class="stat-card">
+                <i class="fas fa-dollar-sign"></i>
+                <h3 id="totalValue">-</h3>
+                <p id="totalValueText">Nilai Total</p>
+              </div>
+              <div class="stat-card">
+                <i class="fas fa-check-circle"></i>
+                <h3 id="totalAirdrops">-</h3>
+                <p id="totalAirdropsText">Total Airdrop</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Filter Section -->
+          <section>
+            <div class="filter-section">
+              <div class="filter-row">
+                <div class="filter-group">
+                  <label for="status" id="statusLabel">Status Airdrop</label>
+                  <select id="status" class="filter-select">
+                    <option value="all">Semua Status</option>
+                    <option value="live">Sedang Berlangsung</option>
+                    <option value="upcoming">Akan Datang</option>
+                    <option value="ended">Selesai</option>
+                  </select>
+                </div>
+                <div class="filter-group">
+                  <label for="category" id="categoryLabel">Kategori</label>
+                  <select id="category" class="filter-select">
+                    <option value="all">Semua Kategori</option>
+                    <option value="defi">DeFi</option>
+                    <option value="nft">NFT</option>
+                    <option value="gamefi">GameFi</option>
+                    <option value="layer2">Layer 2</option>
+                    <option value="wallet">Wallet</option>
+                  </select>
+                </div>
+                <div class="filter-group">
+                  <label for="blockchain" id="blockchainLabel"
+                    >Jaringan Blockchain</label
+                  >
+                  <select id="blockchain" class="filter-select">
+                    <option value="all">Semua Jaringan</option>
+                    <option value="ethereum">Ethereum</option>
+                    <option value="bsc">Binance Smart Chain</option>
+                    <option value="solana">Solana</option>
+                    <option value="polygon">Polygon</option>
+                    <option value="arbitrum">Arbitrum</option>
+                  </select>
+                </div>
+              </div>
+              <div class="filter-row">
+                <div class="filter-group">
+                  <label for="value" id="valueLabel">Estimasi Nilai</label>
+                  <select id="value" class="filter-select">
+                    <option value="all">Semua Nilai</option>
+                    <option value="0-50">$0 - $50</option>
+                    <option value="50-100">$50 - $100</option>
+                    <option value="100-500">$100 - $500</option>
+                    <option value="500+">$500+</option>
+                  </select>
+                </div>
+                <div class="filter-group">
+                  <label for="difficulty" id="difficultyLabel"
+                    >Tingkat Kesulitan</label
+                  >
+                  <select id="difficulty" class="filter-select">
+                    <option value="all">Semua Tingkat</option>
+                    <option value="easy">Mudah</option>
+                    <option value="medium">Sedang</option>
+                    <option value="hard">Sulit</option>
+                  </select>
+                </div>
+                <div class="filter-group">
+                  <label for="search" id="searchLabel">Cari Airdrop</label>
+                  <input
+                    type="text"
+                    id="search"
+                    class="filter-input"
+                    placeholder="Nama proyek atau token..."
+                  />
+                </div>
+              </div>
+              <div class="filter-actions">
+                <div class="filter-tags" id="filterTags"></div>
+                <div>
+                  <button class="btn btn-primary" id="applyFilters">
+                    Terapkan Filter
+                  </button>
+                  <button class="btn btn-outline" id="resetFilters">
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="results-info">
+              <div class="results-count" id="resultsCount">Memuat data...</div>
+              <div class="sort-options">
+                <label for="sort" id="sortLabel">Urutkan: </label>
+                <select id="sort">
+                  <option value="newest">Terbaru</option>
+                  <option value="popular">Populer</option>
+                  <option value="value-high">Nilai Tertinggi</option>
+                  <option value="value-low">Nilai Terendah</option>
+                  <option value="ending">Segera Berakhir</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- Airdrop Grid -->
+          <section>
+            <div id="loadingIndicator" class="loading">
+              <i class="fas fa-spinner fa-spin fa-2x"></i>
+              <p id="loadingText">Memuat data airdrop...</p>
+            </div>
+
+            <div id="errorMessage" class="error-message" style="display: none">
+              Gagal memuat data. Silakan refresh halaman.
+            </div>
+
+            <div id="airdropGrid" class="airdrop-grid">
+              <!-- Data akan diisi oleh JavaScript -->
+            </div>
+          </section>
+        </div>
+
+        <!-- DETAIL VIEW -->
+        <div id="detailView" class="view">
+          <!-- Back Button -->
+          <div class="back-button" onclick="showListView()">
+            <i class="fas fa-arrow-left"></i>
+            <span id="backToListText">Kembali ke Daftar Airdrop</span>
+          </div>
+
+          <!-- Detail content akan diisi oleh JavaScript -->
+          <div id="detailContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-column">
+            <h3>LA Crypto</h3>
+            <p>
+              Sumber informasi terpercaya untuk airdrop cryptocurrency dan
+              berita terkini di dunia crypto.
+            </p>
+            <div class="social-links-footer">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-telegram"></i></a>
+              <a href="#"><i class="fab fa-discord"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="footer-column">
+            <h3 id="quickMenuText">Menu Cepat</h3>
+            <ul>
+              <li><a href="index.html">Beranda</a></li>
+              <li><a href="airdrop.html">Airdrop Live</a></li>
+              <li><a href="airdrop.html">Airdrop Mendatang</a></li>
+              <li><a href="Pengembangan.html">Panduan Pemula</a></li>
+              <li><a href="berita.html">Blog</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3 id="categoriesText">Kategori</h3>
+            <ul>
+              <li><a href="Pengembangan.html">DeFi</a></li>
+              <li><a href="Pengembangan.html">NFT</a></li>
+              <li><a href="Pengembangan.html">GameFi</a></li>
+              <li><a href="Pengembangan.html">Layer 2</a></li>
+              <li><a href="Pengembangan.html">Wallet</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3 id="helpText">Bantuan</h3>
+            <ul>
+              <li><a href="Pengembangan.html">Tentang Kami</a></li>
+              <li><a href="Pengembangan.html">Kebijakan Privasi</a></li>
+              <li><a href="Pengembangan.html">Syarat & Ketentuan</a></li>
+              <li><a href="Pengembangan.html">Kontak</a></li>
+              <li><a href="Pengembangan.html">Disclaimer</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 LA Crypto -
+            <span>Airdrop Center and Cryptocurrency News</span>. All rights
+            reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Konfigurasi
+      const APP_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbzhRyWe4M5UwhaQWljHVbtO5AVpszx_2Xg7K26wf7EJTxIqqdq2ha7YR2__s-TdnwcgBg/exec";
+
+      // State
+      let allAirdrops = [];
+      let currentFilters = {};
+      let currentAirdrop = null;
+      let currentLanguage = "id";
+
+      // Load data saat halaman dimuat
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Halaman dimuat, memulai loadAirdrops...");
+        loadAirdrops();
+        setupEventListeners();
+      });
+
+      // Setup event listeners
+      function setupEventListeners() {
+        document
+          .getElementById("applyFilters")
+          .addEventListener("click", applyFilters);
+        document
+          .getElementById("resetFilters")
+          .addEventListener("click", resetFilters);
+        document
+          .getElementById("search")
+          .addEventListener("input", debounce(applyFilters, 500));
+        document
+          .getElementById("sort")
+          .addEventListener("change", applyFilters);
+
+        // Language selector
+        document
+          .getElementById("languageSelect")
+          .addEventListener("change", function (e) {
+            currentLanguage = e.target.value;
+            updateLanguage();
+          });
+      }
+
+      // Debounce untuk search
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+
+      // Load data airdrop dari Google Apps Script
+      async function loadAirdrops() {
+        showLoading();
+
+        try {
+          console.log("Mencoba mengambil data dari:", APP_SCRIPT_URL);
+          const url = `${APP_SCRIPT_URL}?action=getAirdrops`;
+          const response = await fetch(url);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log("Data berhasil diterima:", data);
+
+          if (data.success) {
+            allAirdrops = data.data;
+            console.log("Jumlah airdrop yang diterima:", allAirdrops.length);
+            updateStats();
+            applyFilters();
+          } else {
+            throw new Error(data.message || "Gagal memuat data");
+          }
+        } catch (error) {
+          console.error("Error fetching airdrops:", error);
+          showError("Gagal memuat data: " + error.message);
+        }
+      }
+
+      // Tampilkan loading
+      function showLoading() {
+        document.getElementById("loadingIndicator").style.display = "block";
+        document.getElementById("errorMessage").style.display = "none";
+        document.getElementById("airdropGrid").innerHTML = "";
+      }
+
+      // Tampilkan error
+      function showError(message) {
+        document.getElementById("loadingIndicator").style.display = "none";
+        const errorElement = document.getElementById("errorMessage");
+        errorElement.textContent =
+          message || "Gagal memuat data. Silakan refresh halaman.";
+        errorElement.style.display = "block";
+      }
+
+      // Update statistik
+      function updateStats() {
+        const liveCount = allAirdrops.filter((a) => a.status === "live").length;
+        const upcomingCount = allAirdrops.filter(
+          (a) => a.status === "upcoming"
+        ).length;
+        const totalAirdrops = allAirdrops.length;
+
+        // Hitung total nilai (estimasi)
+        let totalValue = 0;
+        allAirdrops.forEach((a) => {
+          const min = parseFloat(a.estimated_value_min) || 0;
+          const max = parseFloat(a.estimated_value_max) || 0;
+          totalValue += (min + max) / 2;
+        });
+
+        document.getElementById("liveCount").textContent = liveCount;
+        document.getElementById("upcomingCount").textContent = upcomingCount;
+        document.getElementById("totalAirdrops").textContent = totalAirdrops;
+        document.getElementById("totalValue").textContent = `$${Math.round(
+          totalValue
+        )}`;
+      }
+
+      // Terapkan filter
+      function applyFilters() {
+        const status = document.getElementById("status").value;
+        const category = document.getElementById("category").value;
+        const blockchain = document.getElementById("blockchain").value;
+        const value = document.getElementById("value").value;
+        const difficulty = document.getElementById("difficulty").value;
+        const search = document.getElementById("search").value.toLowerCase();
+        const sort = document.getElementById("sort").value;
+
+        currentFilters = {
+          status,
+          category,
+          blockchain,
+          value,
+          difficulty,
+          search,
+          sort,
+        };
+
+        // Filter data
+        let filteredAirdrops = [...allAirdrops];
+
+        // Filter berdasarkan status
+        if (status !== "all") {
+          filteredAirdrops = filteredAirdrops.filter(
+            (a) => a.status === status
+          );
+        }
+
+        // Filter berdasarkan kategori
+        if (category !== "all") {
+          filteredAirdrops = filteredAirdrops.filter(
+            (a) => a.category === category
+          );
+        }
+
+        // Filter berdasarkan blockchain
+        if (blockchain !== "all") {
+          filteredAirdrops = filteredAirdrops.filter(
+            (a) => a.blockchain === blockchain
+          );
+        }
+
+        // Filter berdasarkan nilai
+        if (value !== "all") {
+          filteredAirdrops = filteredAirdrops.filter((a) => {
+            const min = parseFloat(a.estimated_value_min) || 0;
+            const max = parseFloat(a.estimated_value_max) || 0;
+            const avg = (min + max) / 2;
+
+            switch (value) {
+              case "0-50":
+                return avg <= 50;
+              case "50-100":
+                return avg > 50 && avg <= 100;
+              case "100-500":
+                return avg > 100 && avg <= 500;
+              case "500+":
+                return avg > 500;
+              default:
+                return true;
+            }
+          });
+        }
+
+        // Filter berdasarkan kesulitan
+        if (difficulty !== "all") {
+          filteredAirdrops = filteredAirdrops.filter(
+            (a) => a.difficulty === difficulty
+          );
+        }
+
+        // Filter berdasarkan pencarian
+        if (search) {
+          filteredAirdrops = filteredAirdrops.filter(
+            (a) =>
+              a.name.toLowerCase().includes(search) ||
+              a.description.toLowerCase().includes(search) ||
+              a.tags.toLowerCase().includes(search)
+          );
+        }
+
+        // Urutkan data
+        filteredAirdrops.sort((a, b) => {
+          switch (sort) {
+            case "newest":
+              return new Date(b.start_date) - new Date(a.start_date);
+            case "popular":
+              return (b.total_participants || 0) - (a.total_participants || 0);
+            case "value-high":
+              const aValHigh =
+                (parseFloat(a.estimated_value_min) +
+                  parseFloat(a.estimated_value_max)) /
+                2;
+              const bValHigh =
+                (parseFloat(b.estimated_value_min) +
+                  parseFloat(b.estimated_value_max)) /
+                2;
+              return bValHigh - aValHigh;
+            case "value-low":
+              const aValLow =
+                (parseFloat(a.estimated_value_min) +
+                  parseFloat(a.estimated_value_max)) /
+                2;
+              const bValLow =
+                (parseFloat(b.estimated_value_min) +
+                  parseFloat(b.estimated_value_max)) /
+                2;
+              return aValLow - bValLow;
+            case "ending":
+              return new Date(a.end_date) - new Date(b.end_date);
+            default:
+              return 0;
+          }
+        });
+
+        // Update tampilan
+        renderAirdrops(filteredAirdrops);
+      }
+
+      // Reset semua filter
+      function resetFilters() {
+        document.getElementById("status").value = "all";
+        document.getElementById("category").value = "all";
+        document.getElementById("blockchain").value = "all";
+        document.getElementById("value").value = "all";
+        document.getElementById("difficulty").value = "all";
+        document.getElementById("search").value = "";
+        document.getElementById("sort").value = "newest";
+        applyFilters();
+      }
+
+      // Render daftar airdrop
+      function renderAirdrops(airdrops) {
+        const grid = document.getElementById("airdropGrid");
+
+        if (airdrops.length === 0) {
+          grid.innerHTML = `
+            <div class="no-results">
+              <i class="fas fa-search"></i>
+              <h3>Tidak ada airdrop yang sesuai dengan filter</h3>
+              <p>Coba ubah filter pencarian Anda</p>
+            </div>
+          `;
+          document.getElementById("loadingIndicator").style.display = "none";
+          document.getElementById("resultsCount").textContent =
+            "0 airdrop ditemukan";
+          return;
+        }
+
+        let html = "";
+        airdrops.forEach((airdrop) => {
+          const badgeClass = getBadgeClass(airdrop.status);
+          const badgeText = getStatusText(airdrop.status);
+          const valueText = getValueRangeText(airdrop);
+
+          html += `
+            <div class="airdrop-card" onclick="showDetailView('${airdrop.id}')">
+              <div class="airdrop-badge ${badgeClass}">${badgeText}</div>
+              <div class="airdrop-image">
+                <i class="${getCategoryIcon(airdrop.category)}"></i>
+              </div>
+              <div class="airdrop-content">
+                <h3 class="airdrop-title">${airdrop.name}</h3>
+                <div class="airdrop-meta">
+                  <span class="airdrop-value">${valueText}</span>
+                  <span><i class="far fa-clock"></i> ${getDaysLeft(
+                    airdrop.end_date
+                  )}</span>
+                </div>
+                <p class="airdrop-description">${airdrop.description}</p>
+                <div class="airdrop-tags">
+                  <span class="airdrop-tag">${getCategoryText(
+                    airdrop.category
+                  )}</span>
+                  <span class="airdrop-tag">${getBlockchainText(
+                    airdrop.blockchain
+                  )}</span>
+                  <span class="airdrop-tag">${getDifficultyText(
+                    airdrop.difficulty
+                  )}</span>
+                </div>
+                <div class="airdrop-actions">
+                  <button class="btn btn-secondary" onclick="event.stopPropagation(); showDetailView('${
+                    airdrop.id
+                  }')">Lihat Detail</button>
+                  <button class="btn btn-primary" onclick="event.stopPropagation(); followAirdrop('${
+                    airdrop.id
+                  }')">
+                    ${
+                      airdrop.status === "upcoming"
+                        ? "Daftar Whitelist"
+                        : "Ikuti Airdrop"
+                    }
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        grid.innerHTML = html;
+        document.getElementById("loadingIndicator").style.display = "none";
+        document.getElementById(
+          "resultsCount"
+        ).textContent = `${airdrops.length} airdrop ditemukan`;
+      }
+
+      // Tampilkan detail airdrop
+      async function showDetailView(airdropId) {
+        showLoadingDetail();
+
+        try {
+          const url = `${APP_SCRIPT_URL}?action=getAirdropDetail&id=${airdropId}`;
+          const response = await fetch(url);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log("Detail airdrop:", data);
+
+          if (data.success) {
+            currentAirdrop = data.data;
+            renderDetailView(currentAirdrop);
+            document.getElementById("listView").classList.remove("active");
+            document.getElementById("detailView").classList.add("active");
+            document.getElementById("breadcrumbCurrent").textContent =
+              currentAirdrop.name;
+          } else {
+            throw new Error(data.message || "Gagal memuat detail airdrop");
+          }
+        } catch (error) {
+          console.error("Error fetching airdrop detail:", error);
+          showError("Gagal memuat detail airdrop: " + error.message);
+        }
+      }
+
+      // Tampilkan loading di detail view
+      function showLoadingDetail() {
+        document.getElementById("detailContent").innerHTML = `
+          <div class="loading">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Memuat detail airdrop...</p>
+          </div>
+        `;
+      }
+
+      // Render detail view
+      function renderDetailView(airdrop) {
+        const distributionDate = airdrop.distribution_date
+          ? formatDate(airdrop.distribution_date)
+          : "TBA";
+
+        // Render langkah-langkah
+        let stepsHtml = "";
+        if (airdrop.guide_steps && airdrop.guide_steps.length > 0) {
+          stepsHtml = `
+            <div class="guide-section">
+              <h2 class="section-title">
+                <i class="fas fa-list-ol"></i> Panduan Lengkap Step-by-Step
+              </h2>
+              <div class="step-list">
+          `;
+
+          airdrop.guide_steps.forEach((step, index) => {
+            stepsHtml += `
+              <div class="step-item">
+                <div class="step-content">
+                  <h3>${step.title}</h3>
+                  <p>${step.description}</p>
+                </div>
+              </div>
+            `;
+          });
+
+          stepsHtml += `
+              </div>
+            </div>
+          `;
+        }
+
+        // Render syarat umum
+        let requirementsHtml = "";
+        if (airdrop.syarat) {
+          requirementsHtml = `
+            <div class="guide-section">
+              <h2 class="section-title">
+                <i class="fas fa-clipboard-check"></i> Syarat Umum
+              </h2>
+              <div class="full-description-content">
+                ${formatTextWithLineBreaks(airdrop.syarat)}
+              </div>
+            </div>
+          `;
+        }
+
+        // Render deskripsi lengkap
+        let fullDescriptionHtml = "";
+        if (airdrop.full_description) {
+          fullDescriptionHtml = `
+            <div class="full-description">
+              <h2 class="section-title">
+                <i class="fas fa-info-circle"></i> Tentang Airdrop Ini
+              </h2>
+              <div class="full-description-content">
+                ${formatTextWithLineBreaks(airdrop.full_description)}
+              </div>
+            </div>
+          `;
+        }
+
+        const detailHtml = `
+          <div class="airdrop-header">
+            <div class="airdrop-main">
+              <div class="airdrop-badge badge-${airdrop.status}">
+                <i class="fas fa-bolt"></i> ${getStatusText(
+                  airdrop.status
+                ).toUpperCase()}
+              </div>
+              <h1 class="airdrop-title">${airdrop.name}</h1>
+              <p class="airdrop-description">${airdrop.description}</p>
+              
+              <div class="airdrop-tags">
+                <span class="airdrop-tag">${getCategoryText(
+                  airdrop.category
+                )}</span>
+                <span class="airdrop-tag">${getBlockchainText(
+                  airdrop.blockchain
+                )}</span>
+                <span class="airdrop-tag">${getDifficultyText(
+                  airdrop.difficulty
+                )}</span>
+              </div>
+
+              <div class="key-info">
+                <div class="info-item">
+                  <div class="info-label">Estimasi Nilai</div>
+                  <div class="info-value highlight">$${
+                    airdrop.estimated_value_min
+                  } - $${airdrop.estimated_value_max}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Berakhir Dalam</div>
+                  <div class="info-value">${getDaysLeft(airdrop.end_date)}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Jaringan</div>
+                  <div class="info-value">${getBlockchainText(
+                    airdrop.blockchain
+                  )}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Kesulitan</div>
+                  <div class="info-value">${getDifficultyText(
+                    airdrop.difficulty
+                  )}</div>
+                </div>
+              </div>
+
+              <div class="social-links">
+                ${
+                  airdrop.website_url
+                    ? `<a href="${airdrop.website_url}" class="social-link" target="_blank"><i class="fas fa-globe"></i> Website</a>`
+                    : ""
+                }
+                ${
+                  airdrop.twitter_url
+                    ? `<a href="${airdrop.twitter_url}" class="social-link" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>`
+                    : ""
+                }
+                ${
+                  airdrop.discord_url
+                    ? `<a href="${airdrop.discord_url}" class="social-link" target="_blank"><i class="fab fa-discord"></i> Discord</a>`
+                    : ""
+                }
+                ${
+                  airdrop.telegram_url
+                    ? `<a href="${airdrop.telegram_url}" class="social-link" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>`
+                    : ""
+                }
+              </div>
+
+              ${fullDescriptionHtml}
+              
+              ${requirementsHtml}
+              
+              ${stepsHtml}
+
+              <div class="claim-section">
+                <div class="warning-box">
+                  <h4><i class="fas fa-exclamation-triangle"></i> DISCLAIMER PENTING</h4>
+                  <p>${formatTextWithLineBreaks(airdrop.disclaimer)}</p>
+                </div>
+                <button class="btn btn-primary btn-large" onclick="followAirdrop('${
+                  airdrop.id
+                }')">
+                  <i class="fas fa-play-circle"></i> ${
+                    airdrop.status === "upcoming"
+                      ? "Daftar Whitelist"
+                      : "Ikuti Airdrop"
+                  }
+                </button>
+              </div>
+            </div>
+
+            <div class="airdrop-sidebar">
+              <h3 style="margin-bottom: 1.5rem; color: var(--accent);">Info Penting</h3>
+              
+              <div style="margin-bottom: 1.5rem;">
+                <h4 style="color: var(--light); margin-bottom: 0.5rem;">📅 Timeline</h4>
+                <p style="color: #dfe6e9; font-size: 0.9rem;">
+                  • Mulai: ${formatDate(airdrop.start_date)}<br>
+                  • Berakhir: ${formatDate(airdrop.end_date)}<br>
+                  • Distribusi: ${distributionDate}
+                </p>
+              </div>
+
+              <div style="background: rgba(0, 206, 201, 0.1); padding: 1rem; border-radius: 10px; border-left: 4px solid var(--accent);">
+                <h4 style="color: var(--accent); margin-bottom: 0.5rem;">💡 Potensi Tinggi</h4>
+                <p style="color: #dfe6e9; font-size: 0.9rem;">
+                  Airdrop ini diperkirakan memiliki nilai tinggi mengingat ${
+                    airdrop.name.split(" ")[0]
+                  } adalah salah satu proyek di ekosistem ${getBlockchainText(
+          airdrop.blockchain
+        )}.
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById("detailContent").innerHTML = detailHtml;
+      }
+
+      // Kembali ke list view
+      function showListView() {
+        document.getElementById("detailView").classList.remove("active");
+        document.getElementById("listView").classList.add("active");
+        document.getElementById("breadcrumbCurrent").textContent =
+          "Semua Airdrop";
+      }
+
+      // Buka panel admin (placeholder)
+      function openAdminPanel() {
+        alert("Panel admin akan dibuka di sini");
+      }
+
+      // Follow airdrop
+      function followAirdrop(airdropId) {
+        const airdrop = allAirdrops.find((a) => a.id === airdropId);
+        if (airdrop) {
+          const url = airdrop.website_url || airdrop.twitter_url || "#";
+          if (url !== "#") {
+            window.open(url, "_blank");
+          }
+          alert(`Mengikuti airdrop: ${airdrop.name}`);
+        }
+      }
+
+      // Helper functions
+      function getBadgeClass(status) {
+        switch (status) {
+          case "live":
+            return "badge-live";
+          case "upcoming":
+            return "badge-upcoming";
+          case "ended":
+            return "badge-ended";
+          default:
+            return "badge-upcoming";
+        }
+      }
+
+      function getStatusText(status) {
+        switch (status) {
+          case "live":
+            return "Sedang Berlangsung";
+          case "upcoming":
+            return "Akan Datang";
+          case "ended":
+            return "Selesai";
+          default:
+            return status;
+        }
+      }
+
+      function getCategoryText(category) {
+        switch (category) {
+          case "defi":
+            return "DeFi";
+          case "nft":
+            return "NFT";
+          case "gamefi":
+            return "GameFi";
+          case "layer2":
+            return "Layer 2";
+          case "wallet":
+            return "Wallet";
+          default:
+            return category;
+        }
+      }
+
+      function getCategoryIcon(category) {
+        const iconMap = {
+          defi: "fas fa-chart-line",
+          nft: "fas fa-palette",
+          gamefi: "fas fa-gamepad",
+          layer2: "fas fa-layer-group",
+          wallet: "fas fa-wallet",
+        };
+        return iconMap[category] || "fas fa-coins";
+      }
+
+      function getBlockchainText(blockchain) {
+        switch (blockchain) {
+          case "ethereum":
+            return "Ethereum";
+          case "bsc":
+            return "Binance Smart Chain";
+          case "solana":
+            return "Solana";
+          case "polygon":
+            return "Polygon";
+          case "arbitrum":
+            return "Arbitrum";
+          default:
+            return blockchain;
+        }
+      }
+
+      function getValueRangeText(airdrop) {
+        const min = airdrop.estimated_value_min
+          ? `$${airdrop.estimated_value_min}`
+          : "$0";
+        const max = airdrop.estimated_value_max
+          ? `$${airdrop.estimated_value_max}`
+          : "$0";
+        return `${min} - ${max}`;
+      }
+
+      function getDifficultyText(difficulty) {
+        switch (difficulty) {
+          case "easy":
+            return "Mudah";
+          case "medium":
+            return "Sedang";
+          case "hard":
+            return "Sulit";
+          default:
+            return difficulty;
+        }
+      }
+
+      function formatDate(dateString) {
+        if (!dateString) return "TBA";
+        try {
+          const date = new Date(dateString);
+          return date.toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          });
+        } catch (e) {
+          return "Tanggal tidak valid";
+        }
+      }
+
+      function getDaysLeft(endDate) {
+        try {
+          const today = new Date();
+          const end = new Date(endDate);
+          const diffTime = end - today;
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+          if (diffDays < 0) return "Selesai";
+          if (diffDays === 0) return "Hari ini";
+          if (diffDays === 1) return "Besok";
+          return `${diffDays} hari lagi`;
+        } catch (e) {
+          return "Tanggal tidak valid";
+        }
+      }
+
+      function formatTextWithLineBreaks(text) {
+        return text.replace(/\n/g, "<br>");
+      }
+
+      // Language functionality (simplified)
+      function updateLanguage() {
+        // This is a simplified version - in a real implementation you would
+        // have a more comprehensive translation system
+        if (currentLanguage === "en") {
+          document.getElementById("backToListText").textContent =
+            "Back to Airdrop List";
+          document.getElementById("pageTitle").textContent =
+            "Explore All Airdrops";
+          document.getElementById("pageDescription").textContent =
+            "Discover the latest and most trusted cryptocurrency airdrops. Live data from our database.";
+        } else {
+          document.getElementById("backToListText").textContent =
+            "Kembali ke Daftar Airdrop";
+          document.getElementById("pageTitle").textContent =
+            "Jelajahi Semua Airdrop";
+          document.getElementById("pageDescription").textContent =
+            "Temukan airdrop cryptocurrency terbaru dan terpercaya. Data langsung dari database.";
+        }
+      }
+    </script>
+  </body>
+</html>

